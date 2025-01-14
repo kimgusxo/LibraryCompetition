@@ -20,6 +20,8 @@ public record BookDTO(
         Integer bookDamage,
         @Schema(example = "가나다")
         String bookLabel,
+        @Schema(example = "www.test.com")
+        String imgThumbnail,
         @Schema(example = "[1, 2, 3]")
         List<String> imageIds,
         @Schema(example = "[1, 2, 3]")
@@ -27,8 +29,8 @@ public record BookDTO(
 ) {
 
     public static BookDTO of(String bookId, Integer bookSequence, String bookTitle, String bookAuthor,
-                             String bookWarning, Integer bookDamage, String bookLabel, List<String> imageIds, List<String> loanIds) {
-        return new BookDTO(bookId, bookSequence, bookTitle, bookAuthor, bookWarning, bookDamage, bookLabel, imageIds, loanIds);
+                             String bookWarning, Integer bookDamage, String bookLabel, String imgThumbnail, List<String> imageIds, List<String> loanIds) {
+        return new BookDTO(bookId, bookSequence, bookTitle, bookAuthor, bookWarning, bookDamage, bookLabel, imgThumbnail, imageIds, loanIds);
     }
 
     public static BookDTO from(Book book) {
@@ -40,6 +42,7 @@ public record BookDTO(
                 book.getBookWarning(),
                 book.getBookDamage(),
                 book.getBookLabel(),
+                book.getImgThumbnail(),
                 book.getImageIds(),
                 book.getLoanIds()
         );
@@ -54,9 +57,9 @@ public record BookDTO(
                 .bookWarning(bookWarning)
                 .bookDamage(bookDamage)
                 .bookLabel(bookLabel)
+                .imgThumbnail(imgThumbnail)
                 .imageIds(imageIds)
                 .loanIds(loanIds)
                 .build();
     }
-
 }

@@ -26,6 +26,7 @@ public class Member {
     private String memberPhoneNumber;
     private String memberWarning;
     private Integer memberDamageCount;
+    private String memberImg;
 
     private List<String> loanIds = new ArrayList<>();
 

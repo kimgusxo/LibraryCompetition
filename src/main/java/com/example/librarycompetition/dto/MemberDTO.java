@@ -19,13 +19,15 @@ public record MemberDTO(
         String memberWarning,
         @Schema(example = "1")
         Integer memberDamageCount,
+        @Schema(example = "www.test.com")
+        String memberImg,
         @Schema(example = "[1, 2, 3]")
         List<String> loanIds
 ) {
 
     public static MemberDTO of(String memberId, String memberName, LocalDate memberBirth, String memberPhoneNumber,
-                               String memberWarning, Integer memberDamageCount, List<String> loanIds) {
-        return new MemberDTO(memberId, memberName, memberBirth, memberPhoneNumber, memberWarning, memberDamageCount, loanIds);
+                               String memberWarning, Integer memberDamageCount, String memberImg, List<String> loanIds) {
+        return new MemberDTO(memberId, memberName, memberBirth, memberPhoneNumber, memberWarning, memberDamageCount, memberImg, loanIds);
     }
 
     public static MemberDTO from(Member member) {
@@ -36,6 +38,7 @@ public record MemberDTO(
                 member.getMemberPhoneNumber(),
                 member.getMemberWarning(),
                 member.getMemberDamageCount(),
+                member.getMemberImg(),
                 member.getLoanIds()
         );
     }
@@ -48,6 +51,7 @@ public record MemberDTO(
                 .memberPhoneNumber(memberPhoneNumber)
                 .memberWarning(memberWarning)
                 .memberDamageCount(memberDamageCount)
+                .memberImg(memberImg)
                 .loanIds(loanIds)
                 .build();
     }

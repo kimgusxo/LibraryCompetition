@@ -26,6 +26,7 @@ public class Book {
     private Integer bookDamage;
     private String bookWarning;
     private String bookLabel;
+    private String imgThumbnail;
 
     private List<String> imageIds = new ArrayList<>();
     private List<String> loanIds = new ArrayList<>();
