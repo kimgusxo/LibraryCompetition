@@ -20,10 +20,10 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
 
-@Tag(name = "loan", description = "Loan API")
+@Tag(name = "loans", description = "Loan API")
 @Slf4j
 @RestController
-@RequestMapping("/loan")
+@RequestMapping("/loans")
 @RequiredArgsConstructor
 public class LoanController {
 
@@ -34,7 +34,7 @@ public class LoanController {
             @ApiResponse(responseCode = "200", description = "대출 검색 성공", content = @Content(schema = @Schema(implementation = LoanDTO.class))),
             @ApiResponse(responseCode = "404", description = "대출이 존재하지 않습니다.", content = @Content(schema = @Schema(implementation = ErrorDTO.class))),
     })
-    @GetMapping("/get/{loanId}")
+    @GetMapping("/{loanId}")
     public ResponseEntity<LoanDTO> getOneLoan(@Parameter(description = "대출 인덱스")
                                                   @PathVariable String loanId) {
         log.info("getOneLoan : loanId = {}", loanId);
@@ -46,7 +46,7 @@ public class LoanController {
             @ApiResponse(responseCode = "200", description = "대출 리스트 검색 성공", content = @Content(array = @ArraySchema(schema = @Schema(implementation = LoanDTO.class)))),
             @ApiResponse(responseCode = "404", description = "대출 리스트가 존재하지 않습니다.", content = @Content(schema = @Schema(implementation = ErrorDTO.class))),
     })
-    @GetMapping("/get/all")
+    @GetMapping
     public ResponseEntity<List<LoanDTO>> getAllLoan() {
         log.info("getAllLoan");
         return new ResponseEntity<>(loanService.getAllLoan(), HttpStatus.OK);
@@ -57,9 +57,9 @@ public class LoanController {
             @ApiResponse(responseCode = "200", description = "대출 리스트 검색 성공", content = @Content(array = @ArraySchema(schema = @Schema(implementation = LoanDTO.class)))),
             @ApiResponse(responseCode = "404", description = "대출 리스트가 존재하지 않습니다.", content = @Content(schema = @Schema(implementation = ErrorDTO.class))),
     })
-    @GetMapping("/get/memberId/{memberId}")
+    @GetMapping("/memberId")
     public ResponseEntity<List<LoanDTO>> getLoansByMemberId(@Parameter(description = "멤버 인덱스")
-                                                                @PathVariable String memberId) {
+                                                                @RequestParam String memberId) {
         log.info("getLoansByMemberId : memberId = {}", memberId);
         return new ResponseEntity<>(loanService.getLoansByMemberId(memberId), HttpStatus.OK);
     }
@@ -69,9 +69,9 @@ public class LoanController {
             @ApiResponse(responseCode = "200", description = "대출 리스트 검색 성공", content = @Content(array = @ArraySchema(schema = @Schema(implementation = LoanDTO.class)))),
             @ApiResponse(responseCode = "404", description = "대출 리스트가 존재하지 않습니다.", content = @Content(schema = @Schema(implementation = ErrorDTO.class))),
     })
-    @GetMapping("/get/bookId/{bookId}")
+    @GetMapping("/bookId")
     public ResponseEntity<List<LoanDTO>> getLoansByBookId(@Parameter(description = "책 인덱스")
-                                                              @PathVariable String bookId) {
+                                                              @RequestParam String bookId) {
         log.info("getLoansByBookId : bookId = {}", bookId);
         return new ResponseEntity<>(loanService.getLoansByBookId(bookId), HttpStatus.OK);
     }
@@ -81,7 +81,7 @@ public class LoanController {
             @ApiResponse(responseCode = "200", description = "대출 리스트 검색 성공", content = @Content(array = @ArraySchema(schema = @Schema(implementation = LoanDTO.class)))),
             @ApiResponse(responseCode = "404", description = "대출 리스트가 존재하지 않습니다.", content = @Content(schema = @Schema(implementation = ErrorDTO.class))),
     })
-    @GetMapping("/get/currentLoan")
+    @GetMapping("/current")
     public ResponseEntity<List<LoanDTO>> getLoansByLoanTimeIsNotNullAndReturnTimeIsNull() {
         log.info("getLoansByLoanTimeIsNotNullAndReturnTimeIsNull");
         return new ResponseEntity<>(loanService.getLoansByLoanTimeIsNotNullAndReturnTimeIsNull(), HttpStatus.OK);
@@ -92,7 +92,7 @@ public class LoanController {
             @ApiResponse(responseCode = "200", description = "대출 리스트 검색 성공", content = @Content(array = @ArraySchema(schema = @Schema(implementation = LoanDTO.class)))),
             @ApiResponse(responseCode = "404", description = "대출 리스트가 존재하지 않습니다.", content = @Content(schema = @Schema(implementation = ErrorDTO.class))),
     })
-    @GetMapping("/get/loanTime")
+    @GetMapping("/loanTime")
     public ResponseEntity<List<LoanDTO>> getLoansByLoanTimeBetween(@Parameter(description = "시작 시간") @RequestParam LocalDate startDate,
                                                                    @Parameter(description = "끝 시간") @RequestParam LocalDate endDate) {
         log.info("getLoansByLoanTimeBetween : startDate = {}, endDate = {}", startDate, endDate);
@@ -104,7 +104,7 @@ public class LoanController {
             @ApiResponse(responseCode = "201", description = "대출 생성 성공", content = @Content(schema = @Schema(implementation = LoanDTO.class))),
             @ApiResponse(responseCode = "400", description = "대츨을 생성할 수 없습니다.", content = @Content(schema = @Schema(implementation = ErrorDTO.class))),
     })
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity<LoanDTO> createLoan(@Parameter(description = "생성할 대출 정보를 담은 대출 DTO")
                                                   @RequestBody LoanDTO loanDTO) {
         log.info("createLoan : loanDTO = {}", loanDTO);
@@ -116,7 +116,7 @@ public class LoanController {
             @ApiResponse(responseCode = "202", description = "대출 수정 성공", content = @Content(schema = @Schema(implementation = LoanDTO.class))),
             @ApiResponse(responseCode = "400", description = "대츨을 수정할 수 없습니다.", content = @Content(schema = @Schema(implementation = ErrorDTO.class))),
     })
-    @PutMapping("/update")
+    @PutMapping
     public ResponseEntity<LoanDTO> updateLoan(@Parameter(description = "수정할 대출 정보를 담은 대출 DTO")
                                                   @RequestBody LoanDTO loanDTO) {
         log.info("updateLoan : loanDTO = {}", loanDTO);
@@ -128,9 +128,9 @@ public class LoanController {
             @ApiResponse(responseCode = "204", description = "대출 삭제 성공"),
             @ApiResponse(responseCode = "400", description = "대출을 삭제할 수 없습니다.", content = @Content(schema = @Schema(implementation = ErrorDTO.class))),
     })
-    @DeleteMapping("/delete")
+    @DeleteMapping("/{loanId}")
     public ResponseEntity<Void> deleteLoan(@Parameter(description = "대출 인덱스")
-                                               @RequestParam String loanId) {
+                                               @PathVariable String loanId) {
         log.info("deleteLoan : loanId = {}", loanId);
         loanService.deleteLoan(loanId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

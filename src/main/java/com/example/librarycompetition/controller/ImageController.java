@@ -22,10 +22,10 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
-@Tag(name = "image", description = "Image API")
+@Tag(name = "images", description = "Image API")
 @Slf4j
 @RestController
-@RequestMapping("/image")
+@RequestMapping("/images")
 @RequiredArgsConstructor
 public class ImageController {
 
@@ -36,7 +36,7 @@ public class ImageController {
             @ApiResponse(responseCode = "200", description = "이미지 검색 성공", content = @Content(schema = @Schema(implementation = ImageDTO.class))),
             @ApiResponse(responseCode = "404", description = "이미지가 존재하지 않습니다.", content = @Content(schema = @Schema(implementation = ErrorDTO.class))),
     })
-    @GetMapping("/get/{imageId}")
+    @GetMapping("/{imageId}")
     public ResponseEntity<ImageDTO> getOneImage(@Parameter(description = "이미지 인덱스")
                                                     @PathVariable String imageId) {
         log.info("getOneImage: imageId = {}", imageId);
@@ -48,7 +48,7 @@ public class ImageController {
             @ApiResponse(responseCode = "200", description = "이미지 리스트 검색 성공", content = @Content(array = @ArraySchema(schema = @Schema(implementation = ImageDTO.class)))),
             @ApiResponse(responseCode = "404", description = "이미지 리스트가 존재하지 않습니다.", content = @Content(schema = @Schema(implementation = ErrorDTO.class))),
     })
-    @GetMapping("/get/all")
+    @GetMapping
     public ResponseEntity<List<ImageDTO>> getAllImage() {
         log.info("getAllImage");
         return new ResponseEntity<>(imageService.getAllImage(), HttpStatus.OK);
@@ -59,9 +59,9 @@ public class ImageController {
             @ApiResponse(responseCode = "200", description = "이미지 리스트 검색 성공", content = @Content(array = @ArraySchema(schema = @Schema(implementation = ImageDTO.class)))),
             @ApiResponse(responseCode = "404", description = "이미지 리스트가 존재하지 않습니다.", content = @Content(schema = @Schema(implementation = ErrorDTO.class))),
     })
-    @GetMapping("/get/bookId/{bookId}")
+    @GetMapping("/bookId")
     public ResponseEntity<List<ImageDTO>> getImagesByBookId(@Parameter(description = "책 인덱스")
-                                                                @PathVariable String bookId) {
+                                                                @RequestParam String bookId) {
         log.info("getImagesByBookId: bookId = {}", bookId);
         return new ResponseEntity<>(imageService.getImagesByBookId(bookId), HttpStatus.OK);
     }
@@ -71,9 +71,9 @@ public class ImageController {
             @ApiResponse(responseCode = "200", description = "이미지 리스트 검색 성공", content = @Content(array = @ArraySchema(schema = @Schema(implementation = ImageDTO.class)))),
             @ApiResponse(responseCode = "404", description = "이미지 리스트가 존재하지 않습니다.", content = @Content(schema = @Schema(implementation = ErrorDTO.class))),
     })
-    @GetMapping("/get/cameraId/{cameraId}")
+    @GetMapping("/cameraId")
     public ResponseEntity<List<ImageDTO>> getImagesByCameraId(@Parameter(description = "책 손상도")
-                                                                  @PathVariable Integer cameraId) {
+                                                                  @RequestParam Integer cameraId) {
         log.info("getImagesByCameraId: cameraId = {}", cameraId);
         return new ResponseEntity<>(imageService.getImagesByCameraId(cameraId), HttpStatus.OK);
     }
@@ -83,9 +83,9 @@ public class ImageController {
             @ApiResponse(responseCode = "200", description = "이미지 리스트 검색 성공", content = @Content(array = @ArraySchema(schema = @Schema(implementation = ImageDTO.class)))),
             @ApiResponse(responseCode = "404", description = "이미지 리스트가 존재하지 않습니다.", content = @Content(schema = @Schema(implementation = ErrorDTO.class))),
     })
-    @GetMapping("/get/startDate/{startDate}")
+    @GetMapping("/startDate")
     public ResponseEntity<List<ImageDTO>> getImagesByImageTimeGreaterThan(@Parameter(description = "시작 시간")
-                                                                              @PathVariable LocalDate startDate) {
+                                                                              @RequestParam LocalDate startDate) {
         log.info("getImagesByImageTimeGreaterThan: startDate = {}", startDate);
         return new ResponseEntity<>(imageService.getImagesByImageTimeGreaterThan(startDate), HttpStatus.OK);
     }
@@ -95,7 +95,7 @@ public class ImageController {
             @ApiResponse(responseCode = "200", description = "이미지 리스트 검색 성공", content = @Content(array = @ArraySchema(schema = @Schema(implementation = ImageDTO.class)))),
             @ApiResponse(responseCode = "404", description = "이미지 리스트가 존재하지 않습니다.", content = @Content(schema = @Schema(implementation = ErrorDTO.class))),
     })
-    @GetMapping("/get/imageTime")
+    @GetMapping("/imageTime")
     public ResponseEntity<List<ImageDTO>> getImagesByImageTimeBetween(@Parameter(description = "시작 시간") @RequestParam LocalDate startDate,
                                                                       @Parameter(description = "끝 시간") @RequestParam LocalDate endDate) {
         log.info("getImagesByImageTimeBetween: startDate = {}, endDate = {}", startDate, endDate);
@@ -107,7 +107,7 @@ public class ImageController {
             @ApiResponse(responseCode = "200", description = "이미지 파일 전송 성공", content = @Content(mediaType = "application/octet-stream")),
             @ApiResponse(responseCode = "404", description = "이미지 파일이 존재하지 않습니다.", content = @Content(schema = @Schema(implementation = ErrorDTO.class))),
     })
-    @GetMapping("/get/file/{imageId}")
+    @GetMapping("/file/{imageId}")
     public ResponseEntity<Resource> getImageFileByImageId(@Parameter(description = "이미지 인덱스")
                                                                    @PathVariable Integer imageId) throws IOException {
         log.info("getImageFileByImageId: imageId = {}", imageId);
@@ -119,7 +119,7 @@ public class ImageController {
             @ApiResponse(responseCode = "200", description = "이미지 파일 리스트 전송 성공", content = @Content(array = @ArraySchema(schema = @Schema(type = "string", format = "binary")))),
             @ApiResponse(responseCode = "404", description = "이미지 파일 리스트가 존재하지 않습니다.", content = @Content(schema = @Schema(implementation = ErrorDTO.class))),
     })
-    @PostMapping("/get/files")
+    @PostMapping("/files")
     public ResponseEntity<List<Resource>> postImagesFileByImageIdList(@Parameter(description = "이미지 인덱스")
                                                                @RequestBody List<Integer> imageIdList) throws IOException {
         log.info("postImageFileByImageId: imageIdList = {}", imageIdList);
@@ -131,7 +131,7 @@ public class ImageController {
             @ApiResponse(responseCode = "201", description = "이미지 생성 성공", content = @Content(schema = @Schema(implementation = ImageDTO.class))),
             @ApiResponse(responseCode = "400", description = "이미지를 생성할 수 없습니다.", content = @Content(schema = @Schema(implementation = ErrorDTO.class))),
     })
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity<ImageDTO> createImage(@Parameter(description = "생성할 이미지 정보를 담은 이미지 DTO")
                                                     @RequestBody ImageDTO imageDTO) {
         log.info("createImage: imageDTO = {}", imageDTO);
@@ -143,7 +143,7 @@ public class ImageController {
             @ApiResponse(responseCode = "202", description = "이미지 업데이트 성공", content = @Content(schema = @Schema(implementation = ImageDTO.class))),
             @ApiResponse(responseCode = "400", description = "이미지를 업데이트할 수 없습니다.", content = @Content(schema = @Schema(implementation = ErrorDTO.class))),
     })
-    @PutMapping("/update")
+    @PutMapping
     public ResponseEntity<ImageDTO> updateImage(@Parameter(description = "수정할 이미지 정보를 담은 이미지 DTO")
                                                     @RequestBody ImageDTO imageDTO) {
         log.info("updateImage: imageDTO = {}", imageDTO);
@@ -155,7 +155,7 @@ public class ImageController {
             @ApiResponse(responseCode = "204", description = "이미지 삭제 성공"),
             @ApiResponse(responseCode = "400", description = "이미지를 삭제할 수 없습니다.", content = @Content(schema = @Schema(implementation = ErrorDTO.class))),
     })
-    @DeleteMapping("/delete/{imageId}")
+    @DeleteMapping("/{imageId}")
     public ResponseEntity<Void> deleteImage(@Parameter(description = "이미지 인덱스")
                                                 @PathVariable String imageId) {
         log.info("deleteImage: imageId = {}", imageId);

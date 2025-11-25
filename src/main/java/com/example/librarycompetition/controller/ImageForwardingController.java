@@ -6,7 +6,6 @@ import com.example.librarycompetition.service.ImageForwardingService;
 import com.example.librarycompetition.service.ImageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -40,7 +39,7 @@ public class ImageForwardingController {
             @ApiResponse(responseCode = "200", description = "이미지 리스트 판별 성공",  content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = Map.class))),
             @ApiResponse(responseCode = "404", description = "이미지 리스트 판별 실패", content = @Content(schema = @Schema(implementation = ErrorDTO.class))),
     })
-    @PostMapping(path = "/post", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Map<String, Object>> postImageForwarding(@Parameter(description = "대출/반납 시 3방향 이미지 리스트") @RequestPart("images") List<MultipartFile> images,
                                                                    @Parameter(description = "대출/반납 시 3방향 이미지 메타데이터 리스트") @RequestPart("metadata") List<ImageDTO> metadata) throws IOException, InterruptedException {
         List<String> urls = imageForwardingService.saveImage(images);

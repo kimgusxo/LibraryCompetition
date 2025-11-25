@@ -19,10 +19,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "member", description = "Member API")
+@Tag(name = "members", description = "Member API")
 @Slf4j
 @RestController
-@RequestMapping("/member")
+@RequestMapping("/members")
 @RequiredArgsConstructor
 public class MemberController {
 
@@ -33,7 +33,7 @@ public class MemberController {
             @ApiResponse(responseCode = "200", description = "멤버 검색 성공", content = @Content(schema = @Schema(implementation = MemberDTO.class))),
             @ApiResponse(responseCode = "404", description = "멤버가 존재하지 않습니다.", content = @Content(schema = @Schema(implementation = ErrorDTO.class))),
     })
-    @GetMapping("/get/{memberId}")
+    @GetMapping("/{memberId}")
     public ResponseEntity<MemberDTO> getOneMember(@Parameter(description = "멤버 인덱스")
                                                       @PathVariable String memberId) {
         log.info("getOneMember : memberId = {}", memberId);
@@ -45,7 +45,7 @@ public class MemberController {
             @ApiResponse(responseCode = "200", description = "멤버 리스트 검색 성공", content = @Content(array = @ArraySchema(schema = @Schema(implementation = MemberDTO.class)))),
             @ApiResponse(responseCode = "404", description = "멤버 리스트가 존재하지 않습니다.", content = @Content(schema = @Schema(implementation = ErrorDTO.class))),
     })
-    @GetMapping("/get/all")
+    @GetMapping
     public ResponseEntity<List<MemberDTO>> getAllMembers() {
         log.info("getAllMembers");
         return new ResponseEntity<>(memberService.getAllMember(), HttpStatus.OK);
@@ -56,9 +56,9 @@ public class MemberController {
             @ApiResponse(responseCode = "200", description = "멤버 리스트 검색 성공", content = @Content(array = @ArraySchema(schema = @Schema(implementation = MemberDTO.class)))),
             @ApiResponse(responseCode = "404", description = "멤버 리스트가 존재하지 않습니다.", content = @Content(schema = @Schema(implementation = ErrorDTO.class))),
     })
-    @GetMapping("/get/memberName/{memberName}")
+    @GetMapping("/memberName")
     public ResponseEntity<List<MemberDTO>> getMembersByMemberName(@Parameter(description = "멤버 이름")
-                                                                      @PathVariable String memberName) {
+                                                                      @RequestParam String memberName) {
         log.info("getMembersByMemberName : memberName = {}", memberName);
         return new ResponseEntity<>(memberService.getMembersByMemberName(memberName), HttpStatus.OK);
     }
@@ -68,9 +68,9 @@ public class MemberController {
             @ApiResponse(responseCode = "200", description = "멤버 리스트 검색 성공", content = @Content(array = @ArraySchema(schema = @Schema(implementation = MemberDTO.class)))),
             @ApiResponse(responseCode = "404", description = "멤버 리스트가 존재하지 않습니다.", content = @Content(schema = @Schema(implementation = ErrorDTO.class))),
     })
-    @GetMapping("/get/memberWarning/{memberWarning}")
+    @GetMapping("/memberWarning")
     public ResponseEntity<List<MemberDTO>> getMembersByMemberWarning(@Parameter(description = "멤버 위험도")
-                                                                         @PathVariable String memberWarning) {
+                                                                         @RequestParam String memberWarning) {
         log.info("getMembersByMemberWarning : memberWarning = {}", memberWarning);
         return new ResponseEntity<>(memberService.getMembersByMemberWarning(memberWarning), HttpStatus.OK);
     }
@@ -80,7 +80,7 @@ public class MemberController {
             @ApiResponse(responseCode = "201", description = "멤버 생성 성공", content = @Content(schema = @Schema(implementation = MemberDTO.class))),
             @ApiResponse(responseCode = "400", description = "멤버를 생성할 수 없습니다.", content = @Content(schema = @Schema(implementation = ErrorDTO.class))),
     })
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity<MemberDTO> createMember(@Parameter(description = "생성할 멤버 정보를 담은 멤버 DTO")
                                                   @RequestBody MemberDTO memberDTO) {
         log.info("createMember : memberDTO = {}", memberDTO);
@@ -92,19 +92,19 @@ public class MemberController {
             @ApiResponse(responseCode = "202", description = "멤버 수정 성공", content = @Content(schema = @Schema(implementation = MemberDTO.class))),
             @ApiResponse(responseCode = "400", description = "멤버를 수정할 수 없습니다.", content = @Content(schema = @Schema(implementation = ErrorDTO.class))),
     })
-    @PutMapping("/update")
+    @PutMapping
     public ResponseEntity<MemberDTO> updateMember(@Parameter(description = "수정할 멤버 정보를 담은 멤버 DTO")
                                                       @RequestBody MemberDTO memberDTO) {
         log.info("updateMember : memberDTO = {}", memberDTO);
         return new ResponseEntity<>(memberService.updateMember(memberDTO), HttpStatus.ACCEPTED);
     }
 
-    @Operation(summary = "Update Member", description = "멤버 인덱스로 멤버 삭제하기")
+    @Operation(summary = "Delete Member", description = "멤버 인덱스로 멤버 삭제하기")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "멤버 삭제 성공"),
             @ApiResponse(responseCode = "400", description = "멤버를 삭제할 수 없습니다.", content = @Content(schema = @Schema(implementation = ErrorDTO.class))),
     })
-    @DeleteMapping("/delete/{memberId}")
+    @DeleteMapping("/{memberId}")
     public ResponseEntity<Void> deleteMember(@Parameter(description = "멤버 인덱스")
                                                  @PathVariable String memberId) {
         log.info("deleteMember : memberId = {}", memberId);

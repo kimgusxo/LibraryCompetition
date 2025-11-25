@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class LibraryCompetitionApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(LibraryCompetitionApplication.class, args);
+        SpringApplication.  run(LibraryCompetitionApplication.class, args);
     }
 
 }
